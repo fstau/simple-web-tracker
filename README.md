@@ -21,11 +21,11 @@ I'll make this more straightforward and config file based once I have a handle o
 * Use js snippet in `js-lib` according to example
 
 ## Next steps
-[ ] Create simple database views as analytics PoC  
-[ ] Create simple visualization based on DB  
-[ ] Load test solution with Postgres to check for viability   
-[ ] Redis layer  
-[ ] Config, deployability, documentation
+- [ ] Create simple database views as analytics PoC  
+- [ ] Create simple visualization based on DB  
+- [ ] Load test solution with Postgres to check for viability   
+- [ ] Redis layer  
+- [ ] Config, deployability, documentation
 
 ## Contributing
 I am open for collaboration - if you find this project useful/ inspiring/ fun to work on please get in touch via Twitter or Email. 
