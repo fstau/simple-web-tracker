@@ -12,16 +12,32 @@
     let t = initTracker("http://localhost:8080", 'tuid', 'allowTracker')
   </script>
 
+  <h1>Tracker</h1>
+
+  <h2>Cookies</h2>
+
   <button id="accept_cookies">Accept Cookies</button>
   <button id="reject_cookies">Reject Cookies</button>
 
+  <h2>Generic event tests</h2>
+  
   <button id="test1">CUSTOM</button>
   <button id="test2">PAGEVIEW</button>
   <button id="test3">CLICK</button>
   
-  <button id="pv_landing">Pageview: Landing</button>
-  <button id="pv_product">Pageview: Product</button>
-  <button id="pv_cart">Pageview: Cart</button>
+  <h2>Page view event tests</h2>
+
+  <button id="pv_landing">Landing</button>
+  <button id="pv_product">Product</button>
+  <button id="pv_cart">Cart</button>
+  
+  <h2>Click event tests</h2>
+
+  <button id="c_landing_cta_1">Landing: CTA 1</button>
+  <button id="c_landing_cta_2">Landing: CTA 2</button>
+  <button id="c_landing_cta_3">Landing: CTA 3</button>
+  <button id="c_product">Product: Add to cart button</button>
+  <button id="c_cart">Cart: Buy now button</button>
 
   <script>
     document.querySelector('#accept_cookies').addEventListener('click', () => { window.localStorage.allowTracker = true; t.initUserWithPageView('/landing') })
@@ -42,6 +58,12 @@
     document.querySelector('#pv_landing').addEventListener('click', () => { t.trackPageView('/landing') })
     document.querySelector('#pv_product').addEventListener('click', () => { t.trackPageView('/product') })
     document.querySelector('#pv_cart').addEventListener('click', () => { t.trackPageView('/cart') })
+    
+    document.querySelector('#c_landing_cta_1').addEventListener('click', () => { t.trackClick('landing_cta_1') })
+    document.querySelector('#c_landing_cta_2').addEventListener('click', () => { t.trackClick('landing_cta_2') })
+    document.querySelector('#c_landing_cta_3').addEventListener('click', () => { t.trackClick('landing_cta_3') })
+    document.querySelector('#c_product').addEventListener('click', () => { t.trackClick('product_atc') })
+    document.querySelector('#c_cart').addEventListener('click', () => { t.trackClick('cart_buynow') })
   </script>
   
 </body>
