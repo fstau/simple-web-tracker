@@ -8,9 +8,12 @@
   <script src="tracker.min.js"></script>
 </head>
 <body>
-  <script>
-    let t = initTracker("http://localhost:8080")
+  <script> 
+    let t = initTracker("http://localhost:8080", 'tuid', 'allowTracker')
   </script>
+
+  <button id="accept_cookies">Accept Cookies</button>
+  <button id="reject_cookies">Reject Cookies</button>
 
   <button id="test1">CUSTOM</button>
   <button id="test2">PAGEVIEW</button>
@@ -21,6 +24,9 @@
   <button id="pv_cart">Pageview: Cart</button>
 
   <script>
+    document.querySelector('#accept_cookies').addEventListener('click', () => { window.localStorage.allowTracker = true; t.initUserWithPageView('/landing') })
+    document.querySelector('#reject_cookies').addEventListener('click', () => { window.localStorage.allowTracker = false })
+
     document.querySelector('#test1').addEventListener('click', () => {
       t.trackCustom('abc','def')
     })
