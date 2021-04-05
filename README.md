@@ -21,6 +21,7 @@ I'll make this more straightforward and config file based once I have a handle o
 * Use js snippet in `js-lib` according to example
 
 ## Next steps
+- [ ] Add consent management layer / mechanisms to Javascript snippet 
 - [ ] Create simple database views as analytics PoC  
 - [ ] Create simple visualization based on DB  
 - [ ] Load test solution with Postgres to check for viability   
