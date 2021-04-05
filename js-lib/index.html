@@ -24,6 +24,7 @@
   <button id="test1">CUSTOM</button>
   <button id="test2">PAGEVIEW</button>
   <button id="test3">CLICK</button>
+  <button id="test4">Register User</button>
   
   <h2>Page view event tests</h2>
 
@@ -53,6 +54,10 @@
     
     document.querySelector('#test3').addEventListener('click', () => {
       t.trackClick('landingcta')
+    })
+
+    document.querySelector('#test4').addEventListener('click', () => {
+      t.registerUser()
     })
 
     document.querySelector('#pv_landing').addEventListener('click', () => { t.trackPageView('/landing') })

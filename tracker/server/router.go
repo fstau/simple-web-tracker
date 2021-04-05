@@ -43,6 +43,11 @@ func NewRouter(db *sql.DB) *gin.Engine {
 			trackingGroup.GET("/pageview", ec.PageViewEvent)
 			trackingGroup.GET("/click", ec.ClickEvent)
 		}
+		userGroup := v1.Group("users")
+		{
+			uc := new(controllers.UserController)
+			userGroup.GET("/register", uc.NewUser)
+		}
 	}
 	return router
 

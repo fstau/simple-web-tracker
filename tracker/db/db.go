@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"local/tracker/models"
 
-	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 )
 
@@ -31,24 +30,32 @@ func InitDB() *sql.DB {
 }
 
 func WriteEvent(event models.Event) {
-	sql := fmt.Sprintf("INSERT INTO events (id, event, data, cts, sts, origin, referer, ua_hash, uid) VALUES (DEFAULT, '%s', '%s', %d, '%d', '%s', '%s', '%s', '%s')", event.Event, event.Data, event.ClientTimestamp, event.ServerTimestamp, event.Origin, event.Referer, event.UserAgentHash, event.UserId)
+	sql := fmt.Sprintf("INSERT INTO events (id, event, data, cts, sts, origin, referer, uid) VALUES (DEFAULT, '%s', '%s', '%d', '%d', '%s', '%s', '%s')", event.Event, event.Data, event.ClientTimestamp, event.ServerTimestamp, event.Origin, event.Referer, event.UserId)
 	_, err := DB.Exec(sql)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func WriteUA(ua models.UserAgent) (exists bool) {
-	sql := fmt.Sprintf("INSERT INTO useragents (id, ua, ua_hash) VALUES (DEFAULT, '%s', '%s')", ua.UA, ua.UA_Hash)
+func WriteUser(user models.User) {
+	sql := fmt.Sprintf("INSERT INTO users (id, uid, ua, ua_hash, ip_addr, window_width, window_height, window_avail_width, window_avail_height, orientation, cts, sts) VALUES (DEFAULT, '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%d', '%d')", user.UserId, user.UA, user.UA_Hash, user.IPAddr, user.WindowWidth, user.WindowHeight, user.WindowAvailableWidth, user.WindowAvailableHeight, user.Orientation, user.ClientTimestamp, user.ServerTimestamp)
 	_, err := DB.Exec(sql)
 	if err != nil {
-		// Handle expected errors
-		if err, ok := err.(*pq.Error); ok {
-			if err.Code.Name() == "unique_violation" {
-				return true
-			}
-		}
 		panic(err)
 	}
-	return false
 }
+
+// func WriteUA(ua models.UserAgent) (exists bool) {
+// 	sql := fmt.Sprintf("INSERT INTO useragents (id, ua, ua_hash) VALUES (DEFAULT, '%s', '%s')", ua.UA, ua.UA_Hash)
+// 	_, err := DB.Exec(sql)
+// 	if err != nil {
+// 		// Handle expected errors
+// 		if err, ok := err.(*pq.Error); ok {
+// 			if err.Code.Name() == "unique_violation" {
+// 				return true
+// 			}
+// 		}
+// 		panic(err)
+// 	}
+// 	return false
+// }

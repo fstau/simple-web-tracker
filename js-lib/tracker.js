@@ -67,6 +67,12 @@ function initTracker(baseUri, cname, allowTracker) {
       // .then(data => console.log(data));
   }
 
+  tracker.registerUser = function () {
+    fetch(`${baseUri}/v1/users/register?cts=${Date.now()}&uid=${getCookie(cname)}&ww=${window.screen.width}&wh=${window.screen.height}&waw=${window.screen.availWidth}&wah=${window.screen.availHeight}&o=${window.screen.orientation.type}`)
+      .then(r => r.text());
+      // .then(data => console.log(data));
+  }
+
   tracker.initUserWithPageView = function(d) {
     tracker.initUser()
     tracker.trackPageView(d)

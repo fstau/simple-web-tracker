@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"local/tracker/db"
 	"local/tracker/models"
 	"net/http"
@@ -19,15 +18,9 @@ func (e EventController) CustomEvent(c *gin.Context) {
 		return
 	}
 
-	var ua models.UserAgent
-	ua.New(c.GetHeader("User-Agent"))
-	exists := db.WriteUA(ua)
-	fmt.Println("User-Agent", exists)
-
-	event.ServerTimestamp = int(time.Now().Unix())
+	event.ServerTimestamp = int(time.Now().UnixNano() / 1000000)
 	event.Origin = c.GetHeader("Origin")
 	event.Referer = c.GetHeader("Referer")
-	event.UserAgentHash = ua.UA_Hash
 
 	db.WriteEvent(event)
 	c.Status(200)
@@ -40,16 +33,10 @@ func (e EventController) PageViewEvent(c *gin.Context) {
 		return
 	}
 
-	var ua models.UserAgent
-	ua.New(c.GetHeader("User-Agent"))
-	exists := db.WriteUA(ua)
-	fmt.Println("User-Agent", exists)
-
 	event.Event = "pageview"
-	event.ServerTimestamp = int(time.Now().Unix())
+	event.ServerTimestamp = int(time.Now().UnixNano() / 1000000)
 	event.Origin = c.GetHeader("Origin")
 	event.Referer = c.GetHeader("Referer")
-	event.UserAgentHash = ua.UA_Hash
 
 	db.WriteEvent(event)
 	c.Status(200)
@@ -62,16 +49,10 @@ func (e EventController) ClickEvent(c *gin.Context) {
 		return
 	}
 
-	var ua models.UserAgent
-	ua.New(c.GetHeader("User-Agent"))
-	exists := db.WriteUA(ua)
-	fmt.Println("User-Agent", exists)
-
 	event.Event = "click"
-	event.ServerTimestamp = int(time.Now().Unix())
+	event.ServerTimestamp = int(time.Now().UnixNano() / 1000000)
 	event.Origin = c.GetHeader("Origin")
 	event.Referer = c.GetHeader("Referer")
-	event.UserAgentHash = ua.UA_Hash
 
 	db.WriteEvent(event)
 	c.Status(200)

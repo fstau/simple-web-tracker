@@ -7,6 +7,5 @@ type Event struct {
 	ServerTimestamp int
 	Origin          string
 	Referer         string
-	UserAgentHash   string
 	UserId          string `form:"uid"`
 }
