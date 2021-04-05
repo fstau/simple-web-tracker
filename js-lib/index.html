@@ -15,6 +15,10 @@
   <button id="test1">CUSTOM</button>
   <button id="test2">PAGEVIEW</button>
   <button id="test3">CLICK</button>
+  
+  <button id="pv_landing">Pageview: Landing</button>
+  <button id="pv_product">Pageview: Product</button>
+  <button id="pv_cart">Pageview: Cart</button>
 
   <script>
     document.querySelector('#test1').addEventListener('click', () => {
@@ -22,12 +26,16 @@
     })
 
     document.querySelector('#test2').addEventListener('click', () => {
-      t.trackPageView('/landing')
+      t.trackPageView('/product')
     })
-
+    
     document.querySelector('#test3').addEventListener('click', () => {
       t.trackClick('landingcta')
     })
+
+    document.querySelector('#pv_landing').addEventListener('click', () => { t.trackPageView('/landing') })
+    document.querySelector('#pv_product').addEventListener('click', () => { t.trackPageView('/product') })
+    document.querySelector('#pv_cart').addEventListener('click', () => { t.trackPageView('/cart') })
   </script>
   
 </body>

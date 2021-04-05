@@ -8,7 +8,7 @@ function initTracker(baseUri) {
   }
 
   tracker.trackPageView = function (d) {
-    fetch(`${baseUri}/v1/tracking/pageview?cts=${Date.now()}&d=${d}`)
+    fetch(`${baseUri}/v1/tracking/pageview?cts=${Date.now()}&d=${d}&uid=testuid`)
       .then(r => r.text());
       // .then(data => console.log(data));
   }
