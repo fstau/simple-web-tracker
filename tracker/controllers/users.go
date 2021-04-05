@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"local/tracker/db"
 	"local/tracker/models"
+	"local/tracker/util"
 	"net/http"
-	"time"
 )
 
 type UserController struct{}
@@ -19,7 +19,7 @@ func (u UserController) NewUser(c *gin.Context) {
 
 	user.SetUA(c.GetHeader("User-Agent"))
 	user.IPAddr = c.ClientIP()
-	user.ServerTimestamp = int(time.Now().UnixNano() / 1000000)
+	user.ServerTimestamp = util.GetTimeUnixMicro()
 
 	db.WriteUser(user)
 	c.Status(200)

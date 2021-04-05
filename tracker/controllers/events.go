@@ -3,8 +3,8 @@ package controllers
 import (
 	"local/tracker/db"
 	"local/tracker/models"
+	"local/tracker/util"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +18,7 @@ func (e EventController) CustomEvent(c *gin.Context) {
 		return
 	}
 
-	event.ServerTimestamp = int(time.Now().UnixNano() / 1000000)
+	event.ServerTimestamp = util.GetTimeUnixMicro()
 	event.Origin = c.GetHeader("Origin")
 	event.Referer = c.GetHeader("Referer")
 
@@ -34,7 +34,7 @@ func (e EventController) PageViewEvent(c *gin.Context) {
 	}
 
 	event.Event = "pageview"
-	event.ServerTimestamp = int(time.Now().UnixNano() / 1000000)
+	event.ServerTimestamp = util.GetTimeUnixMicro()
 	event.Origin = c.GetHeader("Origin")
 	event.Referer = c.GetHeader("Referer")
 
@@ -50,7 +50,7 @@ func (e EventController) ClickEvent(c *gin.Context) {
 	}
 
 	event.Event = "click"
-	event.ServerTimestamp = int(time.Now().UnixNano() / 1000000)
+	event.ServerTimestamp = util.GetTimeUnixMicro()
 	event.Origin = c.GetHeader("Origin")
 	event.Referer = c.GetHeader("Referer")
 
