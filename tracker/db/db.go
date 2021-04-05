@@ -31,7 +31,7 @@ func InitDB() *sql.DB {
 }
 
 func WriteEvent(event models.Event) {
-	sql := fmt.Sprintf("INSERT INTO events (id, event, data, cts, sts, origin, referer, ua_hash) VALUES (DEFAULT, '%s', '%s', %d, '%d', '%s', '%s', '%s')", event.Event, event.Data, event.ClientTimestamp, event.ServerTimestamp, event.Origin, event.Referer, event.UserAgentHash)
+	sql := fmt.Sprintf("INSERT INTO events (id, event, data, cts, sts, origin, referer, ua_hash, uid) VALUES (DEFAULT, '%s', '%s', %d, '%d', '%s', '%s', '%s', '%s')", event.Event, event.Data, event.ClientTimestamp, event.ServerTimestamp, event.Origin, event.Referer, event.UserAgentHash, event.UserId)
 	_, err := DB.Exec(sql)
 	if err != nil {
 		panic(err)

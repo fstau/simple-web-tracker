@@ -9,6 +9,7 @@ CREATE TABLE public.events (
   origin text COLLATE pg_catalog."default",
   referer text COLLATE pg_catalog."default",
   ua_hash text COLLATE pg_catalog."default",
+  uid text COLLATE pg_catalog."default",
   CONSTRAINT events_pkey PRIMARY KEY (id)
 );
 

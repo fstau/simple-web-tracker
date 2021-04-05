@@ -8,4 +8,5 @@ type Event struct {
 	Origin          string
 	Referer         string
 	UserAgentHash   string
+	UserId          string `form:"uid"`
 }
