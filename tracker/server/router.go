@@ -47,6 +47,12 @@ func NewRouter(db *sql.DB) *gin.Engine {
 			uc := new(controllers.UserController)
 			usersGroup.POST("", uc.PostUser)
 		}
+
+		sessionsGroup := v1.Group("sessions")
+		{
+			sc := new(controllers.SessionController)
+			sessionsGroup.POST("", sc.PostSession)
+		}
 	}
 	return router
 

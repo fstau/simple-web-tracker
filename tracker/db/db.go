@@ -38,7 +38,17 @@ func WriteEvent(event models.Event) {
 }
 
 func WriteUser(user models.User) {
-	sql := fmt.Sprintf("INSERT INTO ingest.users (id, uid, ua, ua_hash, ip_addr, window_width, window_height, window_avail_width, window_avail_height, orientation, cts, sts) VALUES (DEFAULT, '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%d', '%d')", user.UserId, user.UA, user.UA_Hash, user.IPAddr, user.WindowWidth, user.WindowHeight, user.WindowAvailableWidth, user.WindowAvailableHeight, user.Orientation, user.ClientTimestamp, user.ServerTimestamp)
+	sql := fmt.Sprintf("INSERT INTO ingest.users (id, uid, ua, ua_hash, ip_addr, window_width, window_height, window_avail_width, window_avail_height, orientation, cts, sts) VALUES (DEFAULT, '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%d', '%d')",
+		user.UserId, user.UA, user.UA_Hash, user.IPAddr, user.WindowWidth, user.WindowHeight, user.WindowAvailableWidth, user.WindowAvailableHeight, user.Orientation, user.ClientTimestamp, user.ServerTimestamp)
+	_, err := DB.Exec(sql)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func WriteSession(session models.Session) {
+	sql := fmt.Sprintf("INSERT INTO ingest.sessions (id, session, uid, ua, ua_hash, ip_addr, window_width, window_height, window_avail_width, window_avail_height, orientation, cts, sts) VALUES (DEFAULT, '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%d', '%d')",
+		session.SessionId, session.UserId, session.UA, session.UA_Hash, session.IPAddr, session.WindowWidth, session.WindowHeight, session.WindowAvailableWidth, session.WindowAvailableHeight, session.Orientation, session.ClientTimestamp, session.ServerTimestamp)
 	_, err := DB.Exec(sql)
 	if err != nil {
 		panic(err)

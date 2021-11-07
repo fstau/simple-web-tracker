@@ -110,6 +110,22 @@ function trackUser(baseUri, user) {
   }).catch(console.error);
 }
 
+function trackSession(baseUri, user, session) {
+  fetch(`${baseUri}/v1/sessions`, {
+    method: "POST",
+    body: JSON.stringify({
+      cts: new Date().getTime(),
+      s: session,
+      u: user,
+      ww: window.screen.width,
+      wh: window.screen.height,
+      waw: window.screen.availWidth,
+      wah: window.screen.availHeight,
+      o: window.screen.orientation.type,
+    }),
+  }).catch(console.error);
+}
+
 function getTracker(baseUri) {
   const settings = getUserPreferences();
 
@@ -146,6 +162,7 @@ function getTracker(baseUri) {
     ) {
       session = uuidv4();
       setSessionStorage("swt_session", session);
+      trackSession(this.baseUri, this.user, session);
     }
     if (!session) session = "anonymous";
     this.session = session;

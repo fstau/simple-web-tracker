@@ -4,7 +4,6 @@ import (
 	"local/tracker/db"
 	"local/tracker/models"
 	"local/tracker/util"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,8 +17,6 @@ func (u UserController) PostUser(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-
-	log.Println(user)
 
 	user.SetUA(c.GetHeader("User-Agent"))
 	user.IPAddr = c.ClientIP()
