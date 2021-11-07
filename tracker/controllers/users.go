@@ -1,21 +1,25 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"local/tracker/db"
 	"local/tracker/models"
 	"local/tracker/util"
+	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserController struct{}
 
-func (u UserController) NewUser(c *gin.Context) {
+func (u UserController) PostUser(c *gin.Context) {
 	var user models.User
-	if err := c.ShouldBindQuery(&user); err != nil {
+	if err := c.ShouldBindJSON(&user); err != nil {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+
+	log.Println(user)
 
 	user.SetUA(c.GetHeader("User-Agent"))
 	user.IPAddr = c.ClientIP()

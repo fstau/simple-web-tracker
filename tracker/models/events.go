@@ -1,11 +1,14 @@
 package models
 
 type Event struct {
-	Event           string `form:"e"`
-	Data            string `form:"d"`
-	ClientTimestamp int    `form:"cts"`
+	ClientTimestamp int    `json:"cts"`
+	User            string `json:"u"`
+	Session         string `json:"s"`
+	Event           string `json:"e"`
+	Page            string `json:"p"`
+	Query           string `json:"q"`
+	Data            string `json:"d"`
 	ServerTimestamp int
 	Origin          string
 	Referer         string
-	UserId          string `form:"uid"`
 }

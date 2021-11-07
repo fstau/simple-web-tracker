@@ -84,6 +84,7 @@ function trackEvent(baseUri, user, session, event, page, query, data) {
   fetch(`${baseUri}/v1/track`, {
     method: "POST",
     body: JSON.stringify({
+      cts: new Date().getTime(),
       u: user,
       s: session,
       e: event,

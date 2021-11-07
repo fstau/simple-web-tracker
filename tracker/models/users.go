@@ -6,16 +6,16 @@ import (
 )
 
 type User struct {
-	UserId                string `form:"uid"`
+	UserId                string `json:"uid"`
 	UA                    string
 	UA_Hash               string
 	IPAddr                string
-	WindowWidth           int    `form:"ww"`
-	WindowHeight          int    `form:"wh"`
-	WindowAvailableWidth  int    `form:"waw"`
-	WindowAvailableHeight int    `form:"wah"`
-	Orientation           string `form:"o"`
-	ClientTimestamp       int    `form:"cts"`
+	WindowWidth           int    `json:"ww"`
+	WindowHeight          int    `json:"wh"`
+	WindowAvailableWidth  int    `json:"waw"`
+	WindowAvailableHeight int    `json:"wah"`
+	Orientation           string `json:"o"`
+	ClientTimestamp       int    `json:"cts"`
 	ServerTimestamp       int
 }
 

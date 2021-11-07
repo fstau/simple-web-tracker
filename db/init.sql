@@ -1,22 +1,28 @@
--- Events
-DROP TABLE IF EXISTS public.events;
+-- Schema
+CREATE SCHEMA IF NOT EXISTS ingest;
 
-CREATE TABLE public.events (
+-- Events
+DROP TABLE IF EXISTS ingest.events;
+
+CREATE TABLE ingest.events (
   id bigserial,
-  event text NOT NULL COLLATE pg_catalog."default",
-  data text COLLATE pg_catalog."default",
   cts bigint NOT NULL,
+  uid text COLLATE pg_catalog."default",
+  session text COLLATE pg_catalog."default",
+  event text NOT NULL COLLATE pg_catalog."default",
+  page text COLLATE pg_catalog."default",
+  query text COLLATE pg_catalog."default",
+  data text COLLATE pg_catalog."default",
   sts bigint NOT NULL,
   origin text COLLATE pg_catalog."default",
   referer text COLLATE pg_catalog."default",
-  uid text COLLATE pg_catalog."default",
   CONSTRAINT events_pkey PRIMARY KEY (id)
 );
 
 -- Users
-DROP TABLE IF EXISTS public.users;
+DROP TABLE IF EXISTS ingest.users;
 
-CREATE TABLE public.users (
+CREATE TABLE ingest.users (
   id bigserial,
   uid text NOT NULL COLLATE pg_catalog."default",
   ua text COLLATE pg_catalog."default",
@@ -32,5 +38,5 @@ CREATE TABLE public.users (
   CONSTRAINT users_pkey PRIMARY KEY (id)
 );
 
-CREATE INDEX uid_btree_index ON public.users USING btree(uid);
-CREATE INDEX ua_hash_btree_index ON public.users USING btree(ua_hash);
+CREATE INDEX uid_btree_index ON ingest.users USING btree(uid);
+CREATE INDEX ua_hash_btree_index ON ingest.users USING btree(ua_hash);
