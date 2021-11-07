@@ -1,75 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="tracker.min.js"></script>
-</head>
-<body>
-  <script> 
-    let t = initTracker("http://localhost:8080", 'tuid', 'allowTracker')
-  </script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- <script src="tracker.js"></script> -->
+    <script src="tracker.min.js"></script>
+  </head>
+  <body>
+    <div id="consent_modal" class="modal">
+      <h1>Consent Modal</h1>
+      <button id="accept_tracking">Accept</button>
+      <button id="deny_tracking">Deny</button>
+    </div>
 
-  <h1>Tracker</h1>
+    <script>
+      const tracker = getTracker();
+      tracker.trackPageView();
+      //   let t = initTracker("http://localhost:8080", "tuid", "allowTracker");
+    </script>
 
-  <h2>Cookies</h2>
+    <h1>Tracker</h1>
 
-  <button id="accept_cookies">Accept Cookies</button>
-  <button id="reject_cookies">Reject Cookies</button>
+    <h2>Cookies</h2>
 
-  <h2>Generic event tests</h2>
-  
-  <button id="test1">CUSTOM</button>
-  <button id="test2">PAGEVIEW</button>
-  <button id="test3">CLICK</button>
-  <button id="test4">Register User</button>
-  
-  <h2>Page view event tests</h2>
+    <button id="accept_cookies">Accept Cookies</button>
+    <button id="reject_cookies">Reject Cookies</button>
 
-  <button id="pv_landing">Landing</button>
-  <button id="pv_product">Product</button>
-  <button id="pv_cart">Cart</button>
-  
-  <h2>Click event tests</h2>
+    <h2>Generic event tests</h2>
 
-  <button id="c_landing_cta_1">Landing: CTA 1</button>
-  <button id="c_landing_cta_2">Landing: CTA 2</button>
-  <button id="c_landing_cta_3">Landing: CTA 3</button>
-  <button id="c_product">Product: Add to cart button</button>
-  <button id="c_cart">Cart: Buy now button</button>
+    <button id="test1">CUSTOM</button>
+    <button id="test2">PAGEVIEW</button>
+    <button id="test3">CLICK</button>
+    <button id="test4">Register User</button>
 
-  <script>
-    document.querySelector('#accept_cookies').addEventListener('click', () => { window.localStorage.allowTracker = true; t.initUserWithPageView('/landing') })
-    document.querySelector('#reject_cookies').addEventListener('click', () => { window.localStorage.allowTracker = false })
+    <h2>Page view event tests</h2>
 
-    document.querySelector('#test1').addEventListener('click', () => {
-      t.trackCustom('abc','def')
-    })
+    <button id="pv_landing">Landing</button>
+    <button id="pv_product">Product</button>
+    <button id="pv_cart">Cart</button>
 
-    document.querySelector('#test2').addEventListener('click', () => {
-      t.trackPageView('/product')
-    })
-    
-    document.querySelector('#test3').addEventListener('click', () => {
-      t.trackClick('landingcta')
-    })
+    <h2>Click event tests</h2>
 
-    document.querySelector('#test4').addEventListener('click', () => {
-      t.registerUser()
-    })
+    <button id="c_landing_cta_1">Landing: CTA 1</button>
+    <button id="c_landing_cta_2">Landing: CTA 2</button>
+    <button id="c_landing_cta_3">Landing: CTA 3</button>
+    <button id="c_product">Product: Add to cart button</button>
+    <button id="c_cart">Cart: Buy now button</button>
 
-    document.querySelector('#pv_landing').addEventListener('click', () => { t.trackPageView('/landing') })
-    document.querySelector('#pv_product').addEventListener('click', () => { t.trackPageView('/product') })
-    document.querySelector('#pv_cart').addEventListener('click', () => { t.trackPageView('/cart') })
-    
-    document.querySelector('#c_landing_cta_1').addEventListener('click', () => { t.trackClick('landing_cta_1') })
-    document.querySelector('#c_landing_cta_2').addEventListener('click', () => { t.trackClick('landing_cta_2') })
-    document.querySelector('#c_landing_cta_3').addEventListener('click', () => { t.trackClick('landing_cta_3') })
-    document.querySelector('#c_product').addEventListener('click', () => { t.trackClick('product_atc') })
-    document.querySelector('#c_cart').addEventListener('click', () => { t.trackClick('cart_buynow') })
-  </script>
-  
-</body>
+    <script>
+      document
+        .querySelector("#accept_tracking")
+        .addEventListener("click", () => {
+          closeConsentModal();
+          tracker.updateTracker(true);
+          tracker.trackPageView();
+        });
+      document.querySelector("#deny_tracking").addEventListener("click", () => {
+        tracker.updateTracker(false);
+        closeConsentModal();
+      });
+      document
+        .querySelector("#accept_cookies")
+        .addEventListener("click", () => {
+          window.localStorage.allowTracker = true;
+          t.initUserWithPageView("/landing");
+        });
+      document
+        .querySelector("#reject_cookies")
+        .addEventListener("click", () => {
+          window.localStorage.allowTracker = false;
+        });
+
+      document.querySelector("#test1").addEventListener("click", () => {
+        t.trackCustom("abc", "def");
+      });
+
+      document.querySelector("#test2").addEventListener("click", () => {
+        t.trackPageView("/product");
+      });
+
+      document.querySelector("#test3").addEventListener("click", () => {
+        t.trackClick("landingcta");
+      });
+
+      document.querySelector("#test4").addEventListener("click", () => {
+        t.registerUser();
+      });
+
+      document.querySelector("#pv_landing").addEventListener("click", () => {
+        t.trackPageView("/landing");
+      });
+      document.querySelector("#pv_product").addEventListener("click", () => {
+        t.trackPageView("/product");
+      });
+      document.querySelector("#pv_cart").addEventListener("click", () => {
+        t.trackPageView("/cart");
+      });
+
+      document
+        .querySelector("#c_landing_cta_1")
+        .addEventListener("click", () => {
+          t.trackClick("landing_cta_1");
+        });
+      document
+        .querySelector("#c_landing_cta_2")
+        .addEventListener("click", () => {
+          t.trackClick("landing_cta_2");
+        });
+      document
+        .querySelector("#c_landing_cta_3")
+        .addEventListener("click", () => {
+          t.trackClick("landing_cta_3");
+        });
+      document.querySelector("#c_product").addEventListener("click", () => {
+        t.trackClick("product_atc");
+      });
+      document.querySelector("#c_cart").addEventListener("click", () => {
+        t.trackClick("cart_buynow");
+      });
+    </script>
+  </body>
 </html>
