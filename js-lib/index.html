@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Simple Web Tracker Playground</title>
     <link rel="stylesheet" href="style.css" />
     <!-- <script src="tracker.js"></script> -->
     <script src="tracker.min.js"></script>
@@ -12,114 +12,77 @@
   <body>
     <div id="consent_modal" class="modal">
       <h1>Consent Modal</h1>
-      <button id="accept_tracking">Accept</button>
+      <form>
+        <label for="allow_tracking">Allow tracking</label>
+        <input type="checkbox" name="allow_tracking" id="allow_tracking" />
+        <label for="allow_user">Allow user persistence</label>
+        <input type="checkbox" name="allow_user" id="allow_user" />
+        <label for="allow_session">Allow session persistence</label>
+        <input type="checkbox" name="allow_session" id="allow_session" />
+      </form>
+      <button id="save_tracking">Accept</button>
       <button id="deny_tracking">Deny</button>
     </div>
 
     <script>
-      const tracker = getTracker();
-      tracker.trackPageView();
-      //   let t = initTracker("http://localhost:8080", "tuid", "allowTracker");
+      function getConsentSettings() {
+        const track = document.querySelector("#allow_tracking").checked;
+        const user = document.querySelector("#allow_user").checked;
+        const session = document.querySelector("#allow_session").checked;
+        return {
+          track,
+          user,
+          session,
+        };
+      }
+    </script>
+    <script>
+      const tracker = getTracker("http://localhost:8080");
+      tracker.trackPageView("/");
+
+      document.querySelector("#save_tracking").addEventListener("click", () => {
+        const settings = getConsentSettings();
+        tracker.updateTracker(settings.track, settings.user, settings.session);
+        closeConsentModal();
+        tracker.trackPageView("/");
+      });
+      document.querySelector("#deny_tracking").addEventListener("click", () => {
+        tracker.updateTracker(false, false, false);
+        closeConsentModal();
+      });
     </script>
 
     <h1>Tracker</h1>
 
-    <h2>Cookies</h2>
-
-    <button id="accept_cookies">Accept Cookies</button>
-    <button id="reject_cookies">Reject Cookies</button>
-
-    <h2>Generic event tests</h2>
-
-    <button id="test1">CUSTOM</button>
-    <button id="test2">PAGEVIEW</button>
-    <button id="test3">CLICK</button>
-    <button id="test4">Register User</button>
-
     <h2>Page view event tests</h2>
-
     <button id="pv_landing">Landing</button>
     <button id="pv_product">Product</button>
     <button id="pv_cart">Cart</button>
+    <script>
+      [
+        { id: "#pv_landing", page: "/landing" },
+        { id: "#pv_product", page: "/product" },
+        { id: "#pv_cart", page: "/cart" },
+      ].forEach((element) => {
+        document.querySelector(element.id).addEventListener("click", () => {
+          tracker.trackPageView(element.page);
+        });
+      });
+    </script>
 
     <h2>Click event tests</h2>
-
-    <button id="c_landing_cta_1">Landing: CTA 1</button>
-    <button id="c_landing_cta_2">Landing: CTA 2</button>
-    <button id="c_landing_cta_3">Landing: CTA 3</button>
-    <button id="c_product">Product: Add to cart button</button>
-    <button id="c_cart">Cart: Buy now button</button>
-
+    <button id="cl_cta1">CTA1</button>
+    <button id="cl_cta2">CTA2</button>
+    <button id="cl_cta3">CTA3</button>
     <script>
-      document
-        .querySelector("#accept_tracking")
-        .addEventListener("click", () => {
-          closeConsentModal();
-          tracker.updateTracker(true);
-          tracker.trackPageView();
+      [
+        { id: "#cl_cta1", data: "cta1" },
+        { id: "#cl_cta2", data: "cta2" },
+        { id: "#cl_cta3", data: "cta3" },
+      ].forEach((element) => {
+        document.querySelector(element.id).addEventListener("click", () => {
+          tracker.trackClick(element.data);
         });
-      document.querySelector("#deny_tracking").addEventListener("click", () => {
-        tracker.updateTracker(false);
-        closeConsentModal();
-      });
-      document
-        .querySelector("#accept_cookies")
-        .addEventListener("click", () => {
-          window.localStorage.allowTracker = true;
-          t.initUserWithPageView("/landing");
-        });
-      document
-        .querySelector("#reject_cookies")
-        .addEventListener("click", () => {
-          window.localStorage.allowTracker = false;
-        });
-
-      document.querySelector("#test1").addEventListener("click", () => {
-        t.trackCustom("abc", "def");
-      });
-
-      document.querySelector("#test2").addEventListener("click", () => {
-        t.trackPageView("/product");
-      });
-
-      document.querySelector("#test3").addEventListener("click", () => {
-        t.trackClick("landingcta");
-      });
-
-      document.querySelector("#test4").addEventListener("click", () => {
-        t.registerUser();
-      });
-
-      document.querySelector("#pv_landing").addEventListener("click", () => {
-        t.trackPageView("/landing");
-      });
-      document.querySelector("#pv_product").addEventListener("click", () => {
-        t.trackPageView("/product");
-      });
-      document.querySelector("#pv_cart").addEventListener("click", () => {
-        t.trackPageView("/cart");
-      });
-
-      document
-        .querySelector("#c_landing_cta_1")
-        .addEventListener("click", () => {
-          t.trackClick("landing_cta_1");
-        });
-      document
-        .querySelector("#c_landing_cta_2")
-        .addEventListener("click", () => {
-          t.trackClick("landing_cta_2");
-        });
-      document
-        .querySelector("#c_landing_cta_3")
-        .addEventListener("click", () => {
-          t.trackClick("landing_cta_3");
-        });
-      document.querySelector("#c_product").addEventListener("click", () => {
-        t.trackClick("product_atc");
-      });
-      document.querySelector("#c_cart").addEventListener("click", () => {
-        t.trackClick("cart_buynow");
       });
     </script>
   </body>

@@ -51,13 +51,13 @@ function getUserPreferences() {
   return settings;
 }
 
-function setUserPreferences(track) {
+function setUserPreferences(track, user, session) {
   const settings = {
     track: track,
     preferences: {
       attribution: {
-        user: true,
-        session: true,
+        user: user,
+        session: session,
       },
       events: {
         pageviews: true,
@@ -80,17 +80,25 @@ function closeConsentModal() {
   modal.style.display = "none";
 }
 
-function trackPageView(baseUri, user, session) {
-  fetch(
-    `${baseUri}/v1/tracking/pageview?cts=${Date.now()}&u=${user}&s=${session}`
-  ).catch(console.error);
+function trackEvent(baseUri, user, session, event, page, query, data) {
+  fetch(`${baseUri}/v1/track`, {
+    method: "POST",
+    body: JSON.stringify({
+      u: user,
+      s: session,
+      e: event,
+      p: page,
+      q: query,
+      d: data,
+    }),
+  }).catch(console.error);
 }
 
-function getTracker() {
+function getTracker(baseUri) {
   const settings = getUserPreferences();
 
-  let tracker = {
-    baseUri: "http://localhost:5000",
+  const tracker = {
+    baseUri,
     settings: settings,
   };
 
@@ -122,7 +130,7 @@ function getTracker() {
       session = uuidv4();
       setSessionStorage("swt_session", session);
     }
-    if (!this.session) session = "anonymous";
+    if (!session) session = "anonymous";
     this.session = session;
   };
 
@@ -131,13 +139,31 @@ function getTracker() {
     this.initIdentity();
   };
 
-  tracker.trackPageView = function () {
+  tracker.trackPageView = function (page) {
+    const query = window.location.search;
+    let p = window.location.pathname;
+    if (page) p = page;
     if (this.track && this.eventPreferences.pageviews)
-      trackPageView(this.baseUri, this.user, this.session);
+      trackEvent(this.baseUri, this.user, this.session, "pageview", p, query);
   };
 
-  tracker.updateTracker = function (track) {
-    setUserPreferences(track);
+  tracker.trackClick = function (data) {
+    const query = window.location.search;
+    const page = window.location.pathname;
+    if (this.track && this.eventPreferences.clicks)
+      trackEvent(
+        this.baseUri,
+        this.user,
+        this.session,
+        "click",
+        page,
+        query,
+        data
+      );
+  };
+
+  tracker.updateTracker = function (track, user, session) {
+    setUserPreferences(track, user, session);
     this.settings = getUserPreferences();
     this.init();
   };
@@ -146,71 +172,7 @@ function getTracker() {
     openConsentModal();
     return tracker;
   }
+
   tracker.init();
-  return tracker;
-}
-
-// Tracker
-function initTracker(baseUri, cname, allowTracker) {
-  let tracker = {};
-
-  tracker.initUser = function () {
-    // Set cookies
-    if (!getCookie(cname)) {
-      if (getLocalStorage(allowTracker) == "true") {
-        setCookie(cname, uuidv4(), 90);
-      } else {
-        setCookie(cname, "", 0);
-      }
-    } else {
-      setCookie(cname, "", 0);
-    }
-  };
-
-  tracker.trackCustom = function (e, d) {
-    fetch(
-      `${baseUri}/v1/tracking/custom?cts=${Date.now()}&e=${e}&d=${d}&uid=${getCookie(
-        cname
-      )}`
-    ).then((r) => r.text());
-    // .then(data => console.log(data));
-  };
-
-  tracker.trackPageView = function (d) {
-    fetch(
-      `${baseUri}/v1/tracking/pageview?cts=${Date.now()}&d=${d}&uid=${getCookie(
-        cname
-      )}`
-    ).then((r) => r.text());
-    // .then(data => console.log(data));
-  };
-
-  tracker.trackClick = function (d) {
-    fetch(
-      `${baseUri}/v1/tracking/click?cts=${Date.now()}&d=${d}&uid=${getCookie(
-        cname
-      )}`
-    ).then((r) => r.text());
-    // .then(data => console.log(data));
-  };
-
-  tracker.registerUser = function () {
-    fetch(
-      `${baseUri}/v1/users/register?cts=${Date.now()}&uid=${getCookie(
-        cname
-      )}&ww=${window.screen.width}&wh=${window.screen.height}&waw=${
-        window.screen.availWidth
-      }&wah=${window.screen.availHeight}&o=${window.screen.orientation.type}`
-    ).then((r) => r.text());
-    // .then(data => console.log(data));
-  };
-
-  tracker.initUserWithPageView = function (d) {
-    tracker.initUser();
-    tracker.trackPageView(d);
-  };
-
-  tracker.initUser();
-
   return tracker;
 }
