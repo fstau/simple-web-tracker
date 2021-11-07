@@ -23,14 +23,13 @@ func InitDB() *sql.DB {
 	if err != nil {
 		fmt.Println("Failed to connect to postgres")
 	}
-	// defer db.Close()
 
 	DB = db
 	return db
 }
 
 func WriteEvent(event models.Event) {
-	sql := fmt.Sprintf("INSERT INTO tracker.events (id, cts, uid, session, event, page, query, data, sts, origin, referer) VALUES (DEFAULT, '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s')",
+	sql := fmt.Sprintf("INSERT INTO ingest.events (id, cts, uid, session, event, page, query, data, sts, origin, referer) VALUES (DEFAULT, '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s')",
 		event.ClientTimestamp, event.User, event.Session, event.Event, event.Page, event.Query, event.Data, event.ServerTimestamp, event.Origin, event.Referer)
 	_, err := DB.Exec(sql)
 	if err != nil {
@@ -39,24 +38,9 @@ func WriteEvent(event models.Event) {
 }
 
 func WriteUser(user models.User) {
-	sql := fmt.Sprintf("INSERT INTO users (id, uid, ua, ua_hash, ip_addr, window_width, window_height, window_avail_width, window_avail_height, orientation, cts, sts) VALUES (DEFAULT, '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%d', '%d')", user.UserId, user.UA, user.UA_Hash, user.IPAddr, user.WindowWidth, user.WindowHeight, user.WindowAvailableWidth, user.WindowAvailableHeight, user.Orientation, user.ClientTimestamp, user.ServerTimestamp)
+	sql := fmt.Sprintf("INSERT INTO ingest.users (id, uid, ua, ua_hash, ip_addr, window_width, window_height, window_avail_width, window_avail_height, orientation, cts, sts) VALUES (DEFAULT, '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%d', '%d')", user.UserId, user.UA, user.UA_Hash, user.IPAddr, user.WindowWidth, user.WindowHeight, user.WindowAvailableWidth, user.WindowAvailableHeight, user.Orientation, user.ClientTimestamp, user.ServerTimestamp)
 	_, err := DB.Exec(sql)
 	if err != nil {
 		panic(err)
 	}
 }
-
-// func WriteUA(ua models.UserAgent) (exists bool) {
-// 	sql := fmt.Sprintf("INSERT INTO useragents (id, ua, ua_hash) VALUES (DEFAULT, '%s', '%s')", ua.UA, ua.UA_Hash)
-// 	_, err := DB.Exec(sql)
-// 	if err != nil {
-// 		// Handle expected errors
-// 		if err, ok := err.(*pq.Error); ok {
-// 			if err.Code.Name() == "unique_violation" {
-// 				return true
-// 			}
-// 		}
-// 		panic(err)
-// 	}
-// 	return false
-// }

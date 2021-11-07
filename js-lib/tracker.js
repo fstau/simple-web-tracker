@@ -95,6 +95,21 @@ function trackEvent(baseUri, user, session, event, page, query, data) {
   }).catch(console.error);
 }
 
+function trackUser(baseUri, user) {
+  fetch(`${baseUri}/v1/users`, {
+    method: "POST",
+    body: JSON.stringify({
+      cts: new Date().getTime(),
+      u: user,
+      ww: window.screen.width,
+      wh: window.screen.height,
+      waw: window.screen.availWidth,
+      wah: window.screen.availHeight,
+      o: window.screen.orientation.type,
+    }),
+  }).catch(console.error);
+}
+
 function getTracker(baseUri) {
   const settings = getUserPreferences();
 
@@ -117,6 +132,7 @@ function getTracker(baseUri) {
     ) {
       user = uuidv4();
       setCookie("swt_user", user);
+      trackUser(this.baseUri, user);
     }
     if (!user) user = "anonymous";
     this.user = user;

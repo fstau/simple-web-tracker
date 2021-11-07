@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	UserId                string `json:"uid"`
+	UserId                string `json:"u"`
 	UA                    string
 	UA_Hash               string
 	IPAddr                string
